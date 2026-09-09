@@ -1,0 +1,7 @@
+{
+  "name": "example-budgeted-agent",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "node agent.mjs" },
+  "dependencies": { "openai": "^4.0.0" }
+}
