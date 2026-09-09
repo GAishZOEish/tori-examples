@@ -8,7 +8,7 @@ Time to first reward: ~15 minutes.
 
 ## 1. Sign in with GitHub
 Go to **https://www.earntori.com/login** → **Continue with GitHub** → authorize.
-GitHub is how the developer program knows it's you (account age is one of the fraud checks). If you already have a Tori account under the same email, signing in with GitHub links it.
+GitHub is how the developer program knows it's you. If you already have a Tori account under the same email, signing in with GitHub links it.
 
 ## 2. Register your integration (30 seconds, no approval)
 Go to **https://www.earntori.com/developer** → fill in:
@@ -42,14 +42,14 @@ Retries are safe — pass your own `idempotencyKey` or use the one the SDK retur
 Try it on yourself first: use an email you control (a Gmail `+alias` works) and claim it in a private window.
 
 ## 5. Watch the loop reward you
-The moment your first API call lands, your Tori balance shows a **starter reward**. When the user you rewarded signs in for the first time, you're rewarded again; when they mint a key, again. All automatic.
+Your first API call, the first user who claims, the first key they mint — each one rewards you automatically. Watch your Tori balance move.
 
 Check it from the terminal:
 ```bash
 npx @earntori/cli login      # GitHub device flow — enter the code it shows at github.com/login/device
 npx @earntori/cli stats
 ```
-You'll see rewards issued, users reached, claimed, redemptions routed, and **credits earned**, with the three milestones ticked as they happen.
+You'll see rewards issued, users reached, claimed, redemptions routed, and **credits earned**, with milestones ticked as they happen.
 
 ## 6. Use your credits in your tools
 ```bash
@@ -74,14 +74,8 @@ Full docs: **https://www.earntori.com/developers**
 
 ---
 
-## What the program rewards (beta rates)
-| Event | Reward |
-|---|---|
-| Starter — your first API call from a registered integration | $2.50 |
-| First reward your app issues that a user claims (one-time) | $5.00 |
-| First redemption routed through your integration (one-time) | $5.00 |
-
-Guardrails: GitHub account at least 6 months old; $50/developer/month cap; 3 rewarded events/day/integration. Credits go to your Tori balance — spend them with `tori key`.
+## How the developer program rewards you
+You earn AI credits as your integration reaches milestones — your first API call, the first user your app rewards who signs in, the first redemption routed through your integration, and ongoing usage. Rewards land in your Tori balance automatically; amounts vary and may change during the beta. Spend them with `tori key`.
 
 ## What we need from you
 - **Build the thing.** A real integration with real users is the whole point.
