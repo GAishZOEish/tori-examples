@@ -26,7 +26,8 @@ createServer(async (req, res) => {
     const { email } = JSON.parse(raw || "{}");
     const have = points.get("demo-user") ?? 0;
     if (have < 1000) return json(400, { error: "Not enough points" });
-    const r = await tori.issue({ externalUserId: "demo-user", amountCents: 100, reason: "Redeemed 1,000 points", email: email || undefined });
+    // Reward type "points_redeemed" ($1.00, once per event) defined on your developer page.
+    const r = await tori.rewards.trigger({ reward: "points_redeemed", user: { id: "demo-user", email: email || undefined }, eventId: `redeem-${Date.now()}` });
     if (r.issued) points.set("demo-user", have - 1000);
     return json(200, r);
   }
