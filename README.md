@@ -41,7 +41,7 @@ await tori.rewards.trigger({
   eventId: project.id,                              // for once-per-event rewards; makes retries safe
 });
 ```
-That's the whole integration. Duplicates are caught automatically — a retry or a replayed webhook is a no-op. Preview before you go live with `dryRun: true`: it returns what *would* happen (amount, eligibility, remaining limits) and moves nothing. Errors are `ToriError`s with a `code` (`DUPLICATE_EVENT`, `LIMIT_EXCEEDED`, `REWARD_NOT_FOUND`, …).
+That's the whole integration. Every response carries a `reward_id`, the `amount_cents` Tori decided, and `duplicate`. Duplicates are caught automatically — a retry or a replayed webhook is a no-op. Preview before you go live with `tori.rewards.preview({ reward, user })`: it returns `eligible`, `reason`, `amount_cents`, and remaining limits, and moves nothing. Errors are `ToriError`s with a `code` (`DUPLICATE_EVENT`, `LIMIT_EXCEEDED`, `REWARD_NOT_FOUND`, …).
 
 Balances and history: `tori.users.balance(id)`, `tori.users.ledger(id)`. Advanced, dynamic amounts: `tori.rewards.issue({ externalUserId, amountCents, reason })` — prefer `trigger()`.
 
@@ -54,7 +54,7 @@ Here's what happens on their side:
 From your user's point of view: a reward from you, working AI in about two minutes, no card, no subscription. Nothing for you to build on that side — Tori owns the claim, the wallet, the chat, and the key.
 
 ## 6. How you get rewarded
-Your integration earns AI credits as it reaches milestones through **real user activity** — your first API call, the first user your app rewards who signs in, the first redemption routed through your integration, and ongoing usage. Rewards land in your Tori balance automatically; amounts vary and may change during the beta.
+Your integration earns AI credits as it reaches milestones through **real user activity** — your first API call, the first new user your reward brings in who signs in, the first redemption routed through your integration, and ongoing usage. Rewards land in your Tori balance automatically; amounts vary and may change during the beta.
 
 Your own accounts, aliases, and test users don't count. Wire it into a real flow and let your users do the rest.
 
@@ -69,10 +69,10 @@ npx @earntori/cli key --limit 5 --write env
 ```
 
 ## 7. Optional: reward users your own way
-If your users would rather have cash back, points, or a discount, trigger with `rewardType: "EXTERNAL"`. Tori records it, attributes it to you, and (if you set a webhook URL on your developer page) POSTs a signed event you can check with `tori.webhooks.verify()`. You deliver the reward through your own rail, then confirm:
+If your users would rather have cash back, points, or a discount, trigger with `rewardType: "EXTERNAL"`. Tori records it, attributes it to you, and (if you set a webhook URL on your developer page) POSTs a signed event you read with `tori.webhooks.parse()` — it verifies the signature and returns the event. You deliver the reward through your own rail, then confirm:
 ```ts
-const r = await tori.rewards.trigger({ reward: "cash_back_10", user: "u1", eventId: order.id, rewardType: "EXTERNAL" });
-await tori.rewards.confirm(r.idempotency_key, { status: "PAID", reference: "payout_abc" });
+const r = await tori.rewards.trigger({ reward: "cash_back_10", user: { id: user.id }, eventId: order.id, rewardType: "EXTERNAL" });
+await tori.rewards.confirm(r.reward_id, { status: "PAID", reference: "payout_abc" });
 ```
 
 ## 8. Examples
@@ -93,5 +93,4 @@ Full docs: **https://www.earntori.com/developers**
 ## Known limits (honest list)
 - The CLI writes `.env` only; Cursor/Claude Code config writers aren't built — it prints the steps.
 - Rewards to your users are AI credits (Tori-fulfilled) or EXTERNAL (you deliver). Gift cards and other Tori-fulfilled types aren't built yet.
-- New integrations can issue up to $100 of credits before we raise the limit — ask.
 - One integration per account for now.
