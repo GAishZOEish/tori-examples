@@ -38,10 +38,10 @@ const tori = new Tori({ apiKey: process.env.TORI_API_KEY! });
 await tori.rewards.trigger({
   reward: "first_project",                          // the reward type you defined
   user: { id: user.id, email: user.email },         // email → they get a claim email
-  eventId: project.id,                              // for once-per-event rewards; makes retries safe
+  eventId: project.id,                              // required for once-per-event rewards; ignored for once-per-user
 });
 ```
-That's the whole integration. Every response carries a `reward_id`, the `amount_cents` Tori decided, and `duplicate`. Duplicates are caught automatically — a retry or a replayed webhook is a no-op. Preview before you go live with `tori.rewards.preview({ reward, user })`: it returns `eligible`, `reason`, `amount_cents`, and remaining limits, and moves nothing. Errors are `ToriError`s with a `code` (`DUPLICATE_EVENT`, `LIMIT_EXCEEDED`, `REWARD_NOT_FOUND`, …).
+That's the whole integration. Every response carries a `reward_id` — store it; it's the canonical identifier for logs, support, webhooks, and `confirm()` — plus the `amount_cents` Tori decided and `duplicate`. **Retries:** a duplicate `trigger()` returns the *original* `reward_id` and `amount_cents` with `duplicate: true`; nothing moves. Preview before you go live with `tori.rewards.preview({ reward, user })`: it returns `eligible`, `reason`, `amount_cents`, and remaining limits, and moves nothing. Errors are `ToriError`s with a `code` (`DUPLICATE_EVENT`, `LIMIT_EXCEEDED`, `REWARD_NOT_FOUND`, …).
 
 Balances and history: `tori.users.balance(id)`, `tori.users.ledger(id)`. Advanced, dynamic amounts: `tori.rewards.issue({ externalUserId, amountCents, reason })` — prefer `trigger()`.
 
@@ -69,7 +69,7 @@ npx @earntori/cli key --limit 5 --write env
 ```
 
 ## 7. Optional: reward users your own way
-If your users would rather have cash back, points, or a discount, trigger with `rewardType: "EXTERNAL"`. Tori records it, attributes it to you, and (if you set a webhook URL on your developer page) POSTs a signed event you read with `tori.webhooks.parse()` — it verifies the signature and returns the event. You deliver the reward through your own rail, then confirm:
+If your users would rather have cash back, points, or a discount, trigger with `rewardType: "EXTERNAL"`. Tori records it, attributes it to you, and (if you set a webhook URL on your developer page) POSTs a signed event you read with `tori.webhooks.parse()` — it verifies the signature and returns the event. Tori may deliver an event more than once on retry; dedupe on `event.data.reward_id`. `confirm()` is idempotent — repeating `PAID` for the same reward is acknowledged, not re-applied. You deliver the reward through your own rail, then confirm:
 ```ts
 const r = await tori.rewards.trigger({ reward: "cash_back_10", user: { id: user.id }, eventId: order.id, rewardType: "EXTERNAL" });
 await tori.rewards.confirm(r.reward_id, { status: "PAID", reference: "payout_abc" });
