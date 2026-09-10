@@ -36,10 +36,10 @@ const tori = new Tori({ apiKey: process.env.TORI_API_KEY! });
 
 // inside your event handler, e.g. after a user publishes their first project
 await tori.rewards.trigger({
-  reward: "first_project",                          // the reward type you defined
+  reward: "first_project",                          // the reward type you defined (once per user — no eventId needed)
   user: { id: user.id, email: user.email },         // email → they get a claim email
-  eventId: project.id,                              // required for once-per-event rewards; ignored for once-per-user
 });
+// For once-per-event rewards (referrals, per-project), add eventId: referral.id — it's what makes each event distinct.
 ```
 That's the whole integration. Every response carries a `reward_id` — store it; it's the canonical identifier for logs, support, webhooks, and `confirm()` — plus the `amount_cents` Tori decided and `duplicate`. **Retries:** a duplicate `trigger()` returns the *original* `reward_id` and `amount_cents` with `duplicate: true`; nothing moves. Preview before you go live with `tori.rewards.preview({ reward, user })`: it returns `eligible`, `reason`, `amount_cents`, and remaining limits, and moves nothing. Errors are `ToriError`s with a `code` (`DUPLICATE_EVENT`, `LIMIT_EXCEEDED`, `REWARD_NOT_FOUND`, …).
 
