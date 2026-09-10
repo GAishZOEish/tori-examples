@@ -17,34 +17,37 @@ Go to **https://www.earntori.com/developer** → fill in:
 - Kind of integration — an app that sends rewards · a widget where users redeem · an agent on a capped budget
 - Repo or URL (optional)
 
-Click **Create profile + first key**. **Copy the `tori_sk_…` key before you click "I've copied it"** — that button dismisses the panel; it doesn't copy. Lost it? Click *create a key* for a new one. Keep the key server-side; it never goes in client code.
+Click **Create profile + first key** → **Copy key** (the panel appears beside the button; Dismiss stays disabled until you've copied). Keep the key server-side; it never goes in client code.
 
-## 3. Install the SDK
+## 3. Define your reward types
+On the same page, in **Reward types**: name the thing you're rewarding, set the amount, choose once-per-user (activation-style) or once-per-event (referrals, per-project), save. For example: `first_project` · $2 · once per user.
+
+Amounts live here, not in your code — a bug or a leaked key can only fire rewards you've configured, within limits Tori enforces.
+
+## 4. Install the SDK and wire it in
 ```bash
 npm install @earntori/sdk
 ```
-
-## 4. Wire Tori into your app
-Decide what your users get rewarded for — a completed signup, a first project, a referral, a milestone — and call `issue()` from the server-side handler for that event:
+Call `trigger()` from the server-side handler for the event you're rewarding:
 
 ```ts
 import { Tori } from "@earntori/sdk";
 const tori = new Tori({ apiKey: process.env.TORI_API_KEY! });
 
 // inside your event handler, e.g. after a user publishes their first project
-await tori.issue({
-  externalUserId: user.id,               // your id for the user
-  amountCents: 200,                      // what you're giving them (you fund your users' rewards)
-  reason: "Published your first project",
-  email: user.email,                     // they receive a claim email
-  idempotencyKey: `first-project:${user.id}`,   // one key per event; retries are safe
+await tori.rewards.trigger({
+  reward: "first_project",                          // the reward type you defined
+  user: { id: user.id, email: user.email },         // email → they get a claim email
+  eventId: project.id,                              // for once-per-event rewards; makes retries safe
 });
 ```
-One call per event, from your backend, with an idempotency key tied to the event. That's the whole integration. Read balances or history with `tori.balance(id)` and `tori.ledger(id)`.
+That's the whole integration. Duplicates are caught automatically — a retry or a replayed webhook is a no-op. Preview before you go live with `dryRun: true`: it returns what *would* happen (amount, eligibility, remaining limits) and moves nothing. Errors are `ToriError`s with a `code` (`DUPLICATE_EVENT`, `LIMIT_EXCEEDED`, `REWARD_NOT_FOUND`, …).
+
+Balances and history: `tori.users.balance(id)`, `tori.users.ledger(id)`. Advanced, dynamic amounts: `tori.rewards.issue({ externalUserId, amountCents, reason })` — prefer `trigger()`.
 
 ## 5. How your users get rewarded
 Here's what happens on their side:
-1. They get an email from **your app's name**: "*<Your app> sent you $2.00 in AI credits*."
+1. They get an email from **your app's name**: "*[Your app] sent you $2.00 in AI credits*."
 2. They click **Claim your credits** and sign in — that creates their Tori account if they don't have one.
 3. The credits are already there. They can use them immediately in Tori's built-in chat (400+ models), or turn them into a spend-capped API key for Cursor, Claude Code, or any OpenAI-compatible tool — `npx @earntori/cli key --limit 5 --write env` drops it into their `.env`.
 
@@ -66,10 +69,10 @@ npx @earntori/cli key --limit 5 --write env
 ```
 
 ## 7. Optional: reward users your own way
-If your users would rather have cash back, points, or a discount, issue with `rewardType: "EXTERNAL"`. Tori records it, attributes it to you, and (if you set a webhook URL at registration) POSTs a signed event. You deliver the reward through your own rail, then confirm:
+If your users would rather have cash back, points, or a discount, trigger with `rewardType: "EXTERNAL"`. Tori records it, attributes it to you, and (if you set a webhook URL on your developer page) POSTs a signed event you can check with `tori.webhooks.verify()`. You deliver the reward through your own rail, then confirm:
 ```ts
-await tori.issue({ externalUserId: "u1", amountCents: 300, reason: "Cash back", rewardType: "EXTERNAL", idempotencyKey: "rw_1" });
-await tori.confirmReward("rw_1", { status: "PAID", reference: "payout_abc" });
+const r = await tori.rewards.trigger({ reward: "cash_back_10", user: "u1", eventId: order.id, rewardType: "EXTERNAL" });
+await tori.rewards.confirm(r.idempotency_key, { status: "PAID", reference: "payout_abc" });
 ```
 
 ## 8. Examples
