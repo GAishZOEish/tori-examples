@@ -1,96 +1,84 @@
-# Tori Builder Beta — getting started
+# Getting started
 
-Tori is a rewards rail. Your app rewards your users; Tori handles the ledger, the claim, and the redemption — AI credits that work in Cursor, Claude Code, or any OpenAI-compatible tool within minutes. As a beta developer, **Tori rewards you with AI credits for building on it.** Everything below is live today; nothing is a preview.
+Tori adds a check to your coding agent: before it calls a task done, its integration code is checked against a small set of rules, findings come with the fix, and verified fixes earn credits toward a budgeted key for your AI tools. Every check, finding, fix, and reward is written to an append-only log with a signed receipt.
 
-Time to a working integration: ~15 minutes.
+Works in Claude Code (checks run automatically at the stop point) and Cursor (the agent calls the tools).
+
+## Requirements
+
+- Node 18 or later
+- Claude Code or Cursor
+- A git repo you're working in
+- JavaScript / TypeScript projects today
+
+## Install
+
+```
+npx @earntori/cli login
+```
+
+Prints a GitHub sign-in link and a one-time code; open the link and enter the code. The session is stored in `~/.tori/config.json`.
+
+```
+cd your-project
+npx @earntori/cli init
+```
+
+Adds Tori's MCP server to Claude Code or Cursor for this project. In Claude Code it also installs two hooks: one that runs the checks when the agent stops, and one that reminds the agent at session start that the checks and the log are there.
+
+## What happens next
+
+Work normally. When the agent finishes a task in Claude Code, the Stop hook runs the checks on the code it changed.
+
+- Clean: the task completes
+- Findings: the agent is told what's wrong and how to fix it, and the task stays open until it's fixed or you deliberately defer it
+
+In Cursor, ask the agent to run the checks, or run them yourself:
+
+```
+npx @earntori/cli check
+```
+
+## Read the log
+
+```
+npx @earntori/cli ledger
+```
+
+Shows this project's history: findings opened and resolved, what was deferred and why, recent runs, recent rewards. The agent reads the same thing through the `ledger_query` tool.
+
+## Verify a receipt
+
+Every entry on the log has a signed receipt. To check one on your own machine:
+
+```
+npx @earntori/cli receipt <n>
+```
+
+Fetches the entry, recomputes its hash, and verifies the signature against the public key Tori publishes. It prints `VERIFIED`, or `UNSIGNED` / `INVALID` with the reason.
+
+## Deferring a finding
+
+If a finding doesn't apply, the agent can defer it with a reason, or you can add `// tori-ignore` above the line. Deferrals are recorded and never earn credits. Removing the comment reopens the finding.
+
+## Credits and the budgeted key
+
+Verified fixes earn credits. Credits become a spend-capped API key you can use in Cursor, Claude Code, or anything OpenAI-compatible — a budget for your agent that follows the log.
+
+```
+npx @earntori/cli status
+```
+
+Shows your balance and your AI keys. Open findings and recent runs are in `ledger`.
+
+## What's checked
+
+Today: five rules for the mistakes agents make in integration code — webhook handlers that don't verify the signature, secrets or tokens written to logs, personal data written to logs, retried create/transfer/POST calls without an idempotency key, and hard-coded credentials. Rules are versioned; every finding records which version found it.
+
+## Examples
+
+Agents built on Tori, including a budgeted agent running on a capped key: ./examples/budgeted-agent
 
 ---
 
-## 1. Sign in with GitHub
-Go to **https://www.earntori.com/login** → **Continue with GitHub** → authorize.
-GitHub is how the developer program knows it's you. If you already have a Tori account under the same email, signing in with GitHub links it.
-
-## 2. Register your integration
-Go to **https://www.earntori.com/developer** → fill in:
-- Organization / app name
-- What are you building? (one line)
-- Kind of integration — an app that sends rewards · a widget where users redeem · an agent on a capped budget
-- Repo or URL (optional)
-
-Click **Create profile + first key** → **Copy key** (the panel appears beside the button; Dismiss stays disabled until you've copied). Keep the key server-side; it never goes in client code.
-
-## 3. Define your reward types
-On the same page, in **Reward types**: name the thing you're rewarding, set the amount, choose once-per-user (activation-style) or once-per-event (referrals, per-project), save. For example: `first_project` · $2 · once per user.
-
-Amounts live here, not in your code — a bug or a leaked key can only fire rewards you've configured, within limits Tori enforces.
-
-## 4. Install the SDK and wire it in
-```bash
-npm install @earntori/sdk
-```
-Call `trigger()` from the server-side handler for the event you're rewarding:
-
-```ts
-import { Tori } from "@earntori/sdk";
-const tori = new Tori({ apiKey: process.env.TORI_API_KEY! });
-
-// inside your event handler, e.g. after a user publishes their first project
-await tori.rewards.trigger({
-  reward: "first_project",                          // the reward type you defined (once per user — no eventId needed)
-  user: { id: user.id, email: user.email },         // email → they get a claim email
-});
-// For once-per-event rewards (referrals, per-project), add eventId: referral.id — it's what makes each event distinct.
-```
-That's the whole integration. Every response carries a `reward_id` — store it; it's the canonical identifier for logs, support, webhooks, and `confirm()` — plus the `amount_cents` Tori decided and `duplicate`. **Retries:** a duplicate `trigger()` returns the *original* `reward_id` and `amount_cents` with `duplicate: true`; nothing moves. Preview before you go live with `tori.rewards.preview({ reward, user })`: it returns `eligible`, `reason`, `amount_cents`, and remaining limits, and moves nothing. Errors are `ToriError`s with a `code` (`DUPLICATE_EVENT`, `LIMIT_EXCEEDED`, `REWARD_NOT_FOUND`, …).
-
-Balances and history: `tori.users.balance(id)`, `tori.users.ledger(id)`. Advanced, dynamic amounts: `tori.rewards.issue({ externalUserId, amountCents, reason })` — prefer `trigger()`.
-
-## 5. How your users get rewarded
-Here's what happens on their side:
-1. They get an email from **your app's name**: "*[Your app] sent you $2.00 in AI credits*."
-2. They click **Claim your credits** and sign in — that creates their Tori account if they don't have one.
-3. The credits are already there. They can use them immediately in Tori's built-in chat (400+ models), or turn them into a spend-capped API key for Cursor, Claude Code, or any OpenAI-compatible tool — `npx @earntori/cli key --limit 5 --write env` drops it into their `.env`.
-
-From your user's point of view: a reward from you, working AI in about two minutes, no card, no subscription. Nothing for you to build on that side — Tori owns the claim, the wallet, the chat, and the key.
-
-## 6. How you get rewarded
-Your integration earns AI credits as it reaches milestones through **real user activity** — your first API call, the first new user your reward brings in who signs in, the first redemption routed through your integration, and ongoing usage. Rewards land in your Tori balance automatically; amounts vary and may change during the beta.
-
-Your own accounts, aliases, and test users don't count. Wire it into a real flow and let your users do the rest.
-
-Check your numbers from the terminal:
-```bash
-npx @earntori/cli login      # GitHub device flow — enter the code it shows at github.com/login/device
-npx @earntori/cli stats
-```
-And spend what you've earned in your own tools:
-```bash
-npx @earntori/cli key --limit 5 --write env
-```
-
-## 7. Optional: reward users your own way
-If your users would rather have cash back, points, or a discount, trigger with `rewardType: "EXTERNAL"`. Tori records it, attributes it to you, and (if you set a webhook URL on your developer page) POSTs a signed event you read with `tori.webhooks.parse()` — it verifies the signature and returns the event. Tori may deliver an event more than once on retry; dedupe on `event.data.reward_id`. `confirm()` is idempotent — repeating `PAID` for the same reward is acknowledged, not re-applied. You deliver the reward through your own rail, then confirm:
-```ts
-const r = await tori.rewards.trigger({ reward: "cash_back_10", user: { id: user.id }, eventId: order.id, rewardType: "EXTERNAL" });
-await tori.rewards.confirm(r.reward_id, { status: "PAID", reference: "payout_abc" });
-```
-
-## 8. Examples
-Three runnable starters — https://github.com/GAishZOEish/tori-examples
-- `sender-app` — reward a user on signup
-- `rewards-widget` — your points → Tori credits at redemption
-- `budgeted-agent` — an agent loop that stops when its Tori key's cap is spent
-
-Full docs: **https://www.earntori.com/developers**
-
----
-
-## What we need from you
-- **Build the thing.** A real integration with real users is the whole point.
-- **Tell us what broke or confused you** — first 10 minutes especially. Reply to the invite, or message Ben directly.
-- **Tell us what you wanted and couldn't do.** Missing SDK method, wrong reward type, a tool the CLI should write to.
-
-## Known limits (honest list)
-- The CLI writes `.env` only; Cursor/Claude Code config writers aren't built — it prints the steps.
-- Rewards to your users are AI credits (Tori-fulfilled) or EXTERNAL (you deliver). Gift cards and other Tori-fulfilled types aren't built yet.
-- One integration per account for now.
+Built by BQ

@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Tori: Stand up AI-native teams from the CLI</title>
+  <meta name="description" content="npx @earntori/cli init">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* Brand tokens. Everything below keys off these variables. */
+    :root {
+      --bg:      #FAFBF9;   /* page background */
+      --ink:     #14201B;   /* primary text */
+      --muted:   #5B6763;   /* secondary text */
+      --line:    #D9DFDB;   /* hairlines */
+      --accent:  #1F7A4D;   /* prompt glyph, copy confirm, link underline */
+      --panel:   #0F1714;   /* terminal block background */
+      --panel-ink: #E8EDEA; /* terminal block text */
+      --font-text: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0F1714; --ink: #E8EDEA; --muted: #9AA6A0; --line: #263129;
+        --panel: #060A08; --panel-ink: #E8EDEA;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-text);
+      font-size: 1.0625rem;
+      line-height: 1.55;
+    }
+    a { color: inherit; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    main {
+      max-width: 40rem;
+      margin: 0 auto;
+      padding: clamp(4rem, 14vh, 9rem) 1.5rem 4rem;
+    }
+
+    h1 {
+      font-weight: 600;
+      font-size: clamp(1.9rem, 5.5vw, 2.75rem);
+      line-height: 1.12;
+      letter-spacing: -0.015em;
+      margin: 0 0 2.25rem;
+      max-width: 24ch;
+    }
+
+    /* The command is the hero. */
+    .command {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--panel);
+      color: var(--panel-ink);
+      border-radius: 6px;
+      padding: 1rem 1rem 1rem 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 1rem;
+    }
+    .command .prompt { color: var(--accent); user-select: none; }
+    .command code { flex: 1; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .command code::-webkit-scrollbar { display: none; }
+    .command button {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: transparent;
+      color: var(--panel-ink);
+      font: 500 0.8125rem/1 var(--font-text);
+      padding: 0.5rem 0.7rem;
+      border-radius: 4px;
+      cursor: pointer;
+      min-width: 4.5rem;
+    }
+    .command button:hover { border-color: rgba(255,255,255,0.4); }
+    .command button[data-state="copied"] { border-color: var(--accent); color: var(--accent); }
+
+    /* What happens next: a timeline, because it is one. */
+    .next { margin: 2.75rem 0 0; padding: 0; list-style: none; }
+    .next li {
+      display: grid;
+      grid-template-columns: 4.25rem 1fr;
+      gap: 1rem;
+      padding: 0.9rem 0;
+      border-top: 1px solid var(--line);
+    }
+    .next li:last-child { border-bottom: 1px solid var(--line); }
+    .next time {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      color: var(--muted);
+      padding-top: 0.15rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .next p { margin: 0; }
+
+    footer {
+      margin-top: 3.5rem;
+      color: var(--muted);
+      font-size: 0.9375rem;
+    }
+    footer p { margin: 0.35rem 0; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .command button { transition: border-color 120ms ease, color 120ms ease; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Tori: Stand up AI-native teams from the CLI</h1>
+
+    <div class="command" role="group" aria-label="Install command">
+      <span class="prompt" aria-hidden="true">$</span>
+      <code id="cmd">npx @earntori/cli init</code>
+      <button type="button" id="copy" aria-label="Copy install command">Copy</button>
+    </div>
+
+    <ol class="next" aria-label="What happens in the next five minutes">
+      <li><time>0:00</time><p>One command adds Tori's MCP server and hooks to Claude Code or Cursor.</p></li>
+      <li><time>0:30</time><p>Your agent's code is checked before it calls a task done.</p></li>
+      <li><time>2:00</time><p>Findings come with the fix. The agent applies it.</p></li>
+      <li><time>5:00</time><p>Verified work earns credits toward a budgeted key for your AI tools.</p></li>
+    </ol>
+
+    <footer>
+      <p>Built by <a href="https://github.com/GAishZOEish">BQ</a>.</p>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      var btn = document.getElementById('copy');
+      var cmd = document.getElementById('cmd').textContent;
+      var timer;
+      btn.addEventListener('click', function () {
+        function done() {
+          btn.textContent = 'Copied';
+          btn.setAttribute('data-state', 'copied');
+          clearTimeout(timer);
+          timer = setTimeout(function () {
+            btn.textContent = 'Copy';
+            btn.removeAttribute('data-state');
+          }, 1800);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(cmd).then(done, fallback);
+        } else { fallback(); }
+        function fallback() {
+          var r = document.createRange();
+          r.selectNodeContents(document.getElementById('cmd'));
+          var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+          try { document.execCommand('copy'); done(); } catch (e) {}
+          s.removeAllRanges();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
