@@ -2,6 +2,11 @@
   "name": "example-budgeted-agent",
   "private": true,
   "type": "module",
-  "scripts": { "start": "node agent.mjs" },
-  "dependencies": { "openai": "^4.0.0" }
+  "scripts": {
+    "start": "node agent.mjs"
+  },
+  "dependencies": {
+    "@earntori/sdk": "^0.3.0",
+    "openai": "^4.0.0"
+  }
 }

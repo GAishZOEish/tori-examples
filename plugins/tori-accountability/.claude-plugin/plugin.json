@@ -1,0 +1,17 @@
+{
+  "name": "tori-accountability",
+  "version": "0.1.0",
+  "description": "Add Tori's accountability record to an existing agent: journal an intent before each consequential action, an outcome after it, ledger_query at start, receipts at the end.",
+  "author": {
+    "name": "BQ",
+    "url": "https://github.com/GAishZOEish"
+  },
+  "homepage": "https://www.usetori.dev",
+  "keywords": [
+    "tori",
+    "accountability",
+    "journal",
+    "receipts",
+    "agents"
+  ]
+}

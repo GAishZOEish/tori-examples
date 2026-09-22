@@ -1,0 +1,18 @@
+{
+  "name": "tori",
+  "owner": {
+    "name": "BQ",
+    "url": "https://github.com/GAishZOEish"
+  },
+  "metadata": {
+    "description": "Tori \u2014 the accountability layer for AI agents. Plugins that put an agent's actions on a signed, append-only record."
+  },
+  "plugins": [
+    {
+      "name": "tori-accountability",
+      "source": "./tori-accountability",
+      "description": "Scaffold Tori's journal calls (intent \u2192 outcome, ledger_query first, receipts) into an existing agent at its decision points.",
+      "version": "0.1.0"
+    }
+  ]
+}
