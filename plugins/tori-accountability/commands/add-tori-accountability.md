@@ -7,9 +7,13 @@ You are adding Tori's accountability calls to an existing agent in this reposito
 
 Target: $ARGUMENTS (if empty, find the agent's entry point yourself — the file with the main loop or the top-level run function).
 
-## 1. Check the ground first
-- Run `ledger_query` (the Tori MCP tool) with include `open_findings, waived, head` for this project before changing anything. If the tool is missing, Tori is not installed here: stop and tell the developer to run `npx @earntori/cli init`, then restart the session.
+## 1. Check the agent's own code first
+The first thing Tori does with an agent someone built is check it. Before wiring anything:
+- Run `checks_run` (the Tori MCP tool) on the agent's source files — the entry file and every file it imports from this repo. If the tool is missing, Tori is not installed here: stop and tell the developer to run `npx @earntori/cli init`, then restart the session.
+- Fix every high finding and call `checks_resolve` for each with the finding_id and path so the fix is verified. Fix medium and low findings too unless the developer says otherwise; if a finding truly does not apply, defer it with `checks_waive` and a one-line reason — deferrals are recorded and never earn.
+- Then run `ledger_query` with include `open_findings, waived, head` so you know what is open and what was already settled on this project.
 - Read the `tori-sdk` skill for the exact API before writing code.
+Put the check results — findings, fixes, deferrals, receipts — at the top of your reply, before anything about wiring.
 
 ## 2. Find the decision points
 Read the agent and list, in your reply, every place it does one of these:
