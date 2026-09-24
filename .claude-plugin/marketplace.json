@@ -1,0 +1,18 @@
+{
+  "name": "tori",
+  "owner": {
+    "name": "BQ",
+    "url": "https://github.com/GAishZOEish"
+  },
+  "metadata": {
+    "description": "Tori \u2014 hold your coding agents to a standard, and get rewarded when they meet it."
+  },
+  "plugins": [
+    {
+      "name": "tori-accountability",
+      "source": "./plugins/tori-accountability",
+      "description": "Check an agent you built against Tori's standards, then wire Tori's journal calls (intent \u2192 outcome, ledger_query first, receipts) into it.",
+      "version": "0.1.0"
+    }
+  ]
+}

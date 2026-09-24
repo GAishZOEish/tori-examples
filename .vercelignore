@@ -1,3 +1,4 @@
 examples/
 README.md
 plugins/
+.claude-plugin/
