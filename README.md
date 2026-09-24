@@ -34,7 +34,7 @@ Adds Tori's tools to Claude Code, Cursor and Codex for this project. In Claude C
 Coding standards are always on: security, correctness, tests, error handling, migrations, logging and secrets, API design, docs — each finding comes with its fix. Choose the other standards that apply to this project and add your own rules:
 
 ```
-npx @earntori/cli standards            # what's available, and what's on for this project
+npx @earntori/cli standards   # what's available, and what's on for this project
 npx @earntori/cli standards enable privacy accessibility
 npx @earntori/cli rules add "api routes must include requireAuth"
 npx @earntori/cli rules add "No console.log outside dev paths."
