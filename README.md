@@ -27,7 +27,7 @@ npx @earntori/cli init
 
 Adds Tori's tools to Claude Code, Cursor and Codex for this project. In Claude Code and Codex the checks also run automatically when the agent stops, and the agent gets a one-line reminder at session start to read the log first. Restart the session (in Codex, run `/hooks` once to trust the two hooks). From then on:
 
-- The agent's work is checked against the coding standards, the standards you've chosen and your rules before a task completes; serious findings block the task until fixed or deferred, the rest are recorded
+- The agent's work is checked against your coding standards before a task completes; serious findings block the task until fixed or deferred, the rest are recorded
 - If a finding doesn't apply, the agent defers it with your reason (or you add a `// tori-ignore: reason` comment); deferrals are logged and never earn credits
 - In Cursor, ask the agent to run the checks, or run `npx @earntori/cli check` yourself
 
