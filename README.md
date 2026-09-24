@@ -18,7 +18,7 @@ npx @earntori/cli login
 
 Prints a GitHub sign-in link and a one-time code. The session is stored in `~/.tori/config.json`.
 
-## Coding agents — Claude Code, Cursor, Codex
+## Coding agents (CLI and IDE) — Claude Code, Codex, Cursor
 
 ```
 cd your-project
@@ -42,7 +42,7 @@ npx @earntori/cli rules add "No console.log outside dev paths."
 
 `rules add` tells you whether Tori can enforce the rule as written or will record it for the agent to follow. The agent is held to the enabled standards and your rules from the next check on.
 
-## General agents — Claude Cowork, Claude chat
+## Desktop agents — Claude (Chat, Cowork)
 
 ```
 npx @earntori/cli connector new --label cowork
