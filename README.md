@@ -1,6 +1,6 @@
 # Getting started
 
-Tori holds your coding agents to a standard and rewards them with AI credits when they meet it. Before an agent calls a task done, the work it hands back is checked against Tori's coding standards, any other standards you've chosen for the project, and rules you've written; findings come with the fix, the agent applies it, and verified fixes earn credits toward a spend-capped key for your AI tools. Everything the agent does is written to an append-only log with a signed receipt, and the agent reads that log at the start of every session.
+Tori holds your coding agents to a standard and rewards them with AI credits when they meet it. Before an agent calls a task done, the work it hands back is checked against your coding standards; findings come with the fix, the agent applies it, and verified fixes earn credits toward a spend-capped key for your AI tools. Everything the agent does is written to an append-only log with a signed receipt, and the agent reads that log at the start of every session.
 
 Works with agents you use off the shelf — Claude Code, Cursor, Codex, Claude Cowork, Claude chat — and agents you build.
 
@@ -31,7 +31,7 @@ Adds Tori's tools to Claude Code, Cursor and Codex for this project. In Claude C
 - If a finding doesn't apply, the agent defers it with your reason (or you add a `// tori-ignore: reason` comment); deferrals are logged and never earn credits
 - In Cursor, ask the agent to run the checks, or run `npx @earntori/cli check` yourself
 
-Coding standards are always on: security, correctness, tests, error handling, migrations, logging and secrets, API design, docs — each finding comes with its fix. Choose the other standards that apply to this project and add your own rules:
+The standards cover security, correctness, tests, error handling, migrations, logging and secrets, API design and docs — each finding comes with its fix. Choose the standards that apply to this project and add your own rules:
 
 ```
 npx @earntori/cli standards   # what's available, and what's on for this project
