@@ -31,10 +31,10 @@ Adds Tori's tools to Claude Code, Cursor and Codex for this project. In Claude C
 - If a finding doesn't apply, the agent defers it with your reason (or you add a `// tori-ignore: reason` comment); deferrals are logged and never earn credits
 - In Cursor, ask the agent to run the checks, or run `npx @earntori/cli check` yourself
 
-The standards cover security, correctness, tests, error handling, migrations, logging and secrets, API design and docs — each finding comes with its fix. Choose the standards that apply to this project and add your own rules:
+The standards cover security, correctness, tests, error handling, migrations, logging and secrets, API design and docs — each finding comes with its fix. `standards` shows what's available and what's on for this project. Choose the standards that apply and add your own rules:
 
 ```
-npx @earntori/cli standards   # what's available, and what's on for this project
+npx @earntori/cli standards
 npx @earntori/cli standards enable privacy accessibility
 npx @earntori/cli rules add "api routes must include requireAuth"
 npx @earntori/cli rules add "No console.log outside dev paths."
