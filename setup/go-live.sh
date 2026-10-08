@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Tori go-live: move this project from the sandbox to production. Your production record starts fresh.
 set -e
-BASE="https://earntori.com"
+BASE="https://www.earntori.com"
 
 echo "Tori go-live"
 echo
