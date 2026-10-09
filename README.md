@@ -1,6 +1,6 @@
 # Getting started
 
-Tori holds your coding agents to a standard and rewards them with AI credits when they meet it. Before an agent calls a task done, the work it hands back is checked against your coding standards; findings come with the fix, the agent applies it, and verified fixes earn credits toward a spend-capped key for your AI tools. Everything the agent does is written to an append-only log with a signed receipt, and the agent reads that log at the start of every session.
+Tori holds your coding agents to a standard. Before an agent calls a task done, the work it hands back is checked against your coding standards and the standards your industry is held to; findings come with the fix, and the agent applies it. Everything the agent does is written to an append-only log with a signed receipt you can verify offline and show whoever needs proof; the agent reads that log at the start of every session.
 
 Works with agents you use off the shelf — Claude Code, Cursor, Codex, Claude Cowork, Claude chat — and agents you build.
 
@@ -28,10 +28,10 @@ npx @earntori/cli init
 Adds Tori's tools to Claude Code, Cursor and Codex for this project. In Claude Code and Codex the checks also run automatically when the agent stops, and the agent gets a one-line reminder at session start to read the log first. Restart the session (in Codex, run `/hooks` once to trust the two hooks). From then on:
 
 - The agent's work is checked against your coding standards before a task completes; serious findings block the task until fixed or deferred, the rest are recorded
-- If a finding doesn't apply, the agent defers it with your reason (or you add a `// tori-ignore: reason` comment); deferrals are logged and never earn credits
+- If a finding doesn't apply, the agent defers it with your reason (or you add a `// tori-ignore: reason` comment); deferrals are logged
 - In Cursor, ask the agent to run the checks, or run `npx @earntori/cli check` yourself
 
-The standards cover security, correctness, tests, error handling, migrations, logging and secrets, API design and docs — each finding comes with its fix. `standards` shows what's available and what's on for this project. Choose the standards that apply and add your own rules:
+The coding standards are OWASP- and CWE-aligned, and each finding comes with its fix. Domain standards for regulated work turn on per project, and you add your own rules. `standards` shows what's available and what's on for this project:
 
 ```
 npx @earntori/cli standards
@@ -48,7 +48,7 @@ npx @earntori/cli rules add "No console.log outside dev paths."
 npx @earntori/cli connector new --label cowork
 ```
 
-Prints a URL once. In Claude → Settings → Connectors → Add custom connector → paste the whole URL. The agent gets Tori's tools and is told to read the log first and to record what it is about to do and what happened, with a receipt each time. The URL is the secret; revoke it any time with `npx @earntori/cli connector revoke <id>`.
+Prints a URL once. In Claude → Settings → Connectors → Add custom connector → paste the whole URL. From then on the agent reads the log at the start of a session, checks its work against your standards and rules before it calls a task done, and records what it did with a receipt each time. To set the standards and rules for this connector, add `--connector cowork` to the `standards` and `rules` commands above. The URL is the secret; revoke it any time with `npx @earntori/cli connector revoke <id>`.
 
 ## Agents you build
 
@@ -96,16 +96,14 @@ Worked example: [examples/budgeted-agent](./examples/budgeted-agent) — an agen
 | --- | --- |
 | See a project's history | `npx @earntori/cli ledger` — newest first, one line per entry with its receipt; `--project all` for everything you own |
 | See what this project is held to | `npx @earntori/cli standards` and `npx @earntori/cli rules` |
-| Let an agent read it | It calls `ledger_query`; with `include` it gets open findings, deferrals, recent runs, recent fixes and rewards |
+| Let an agent read it             | It calls `ledger_query`; with `include` it gets open findings, deferrals, recent runs and recent fixes                 |
 | Verify one entry | `npx @earntori/cli receipt <seq>` — checks the entry against Tori's published key and prints `VERIFIED` |
-| Follow one action | `ledger_query { action_id }` — the intent and its outcome |
-| Balance and keys | `npx @earntori/cli status` |
+| Follow one action                | `ledger_query { action_id }` — the intent, any findings on it, and its outcome                                        |
+| Keys                             | `npx @earntori/cli status`                                                                                             |
 
-## Credits and keys
+## Keys
 
-Work that meets the standard earns AI credits; credits become a key with a cap you choose. The key works anywhere the OpenAI API works (base URL `https://openrouter.ai/api/v1`, any major model): Cursor, Claude Code, your own code. When its cap is spent it returns 401 and the agent stops — that's the cap working. Mint another to keep going. One key per agent keeps what it spent next to what it did.
-
-Credits land in your balance automatically, with one email on the first reward and a monthly statement after that.
+An agent you build runs on a spend-capped key you mint with `npx @earntori/cli key --limit 5 --write env`. The key works anywhere the OpenAI API works (base URL `https://openrouter.ai/api/v1`, any major model): Cursor, Claude Code, your own code. When its cap is spent it returns 401 and the agent stops; that's the cap working. Mint another to keep going. One key per agent keeps what it spent next to what it did.
 
 ## Packages
 
