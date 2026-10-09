@@ -21,17 +21,42 @@ fi
 echo "Node $(node -v): ok"
 echo
 
+# Resolve the exact package versions once, so nothing in this script or in the files it writes floats
+CLI_VER=$(npm view @earntori/cli version 2>/dev/null)
+MCP_VER=$(npm view @earntori/mcp version 2>/dev/null)
+if [ -z "$CLI_VER" ] || [ -z "$MCP_VER" ]; then
+  echo "Couldn't read the package versions from npm. Check your network and run this again."
+  exit 1
+fi
+TORI="npx -y @earntori/cli@$CLI_VER"
+echo "Using @earntori/cli $CLI_VER and @earntori/mcp $MCP_VER"
+echo
+
 # 2. Sign in (GitHub). Prints a link and a one-time code; enter the code in your browser.
 echo "Signing in to Tori (sandbox)..."
-npx @earntori/cli login --base "$BASE"
+$TORI login --base "$BASE"
 echo
 
 # 3. Install Tori in this project, pinned to sandbox
 echo "Installing Tori in $(pwd)..."
-npx @earntori/cli init --base "$BASE" 
+$TORI init --base "$BASE" 
 echo
 
-# 4. The test file for your first task (only if it isn't already here)
+# Pin the agent config files init just wrote to the exact versions above
+pin_file() {
+  [ -f "$1" ] || return 0
+  perl -pi -e 's#\@earntori/cli(?!\@)#\@earntori/cli\@'"$CLI_VER"'#g; s#\@earntori/mcp(?!\@)#\@earntori/mcp\@'"$MCP_VER"'#g' "$1"
+  echo "  pinned $1"
+}
+echo "Pinning agent config to @earntori/cli@$CLI_VER and @earntori/mcp@$MCP_VER:"
+pin_file .claude/settings.json
+pin_file .codex/hooks.json
+pin_file .codex/config.toml
+pin_file .mcp.json
+pin_file .cursor/mcp.json
+echo
+
+# 4. The test file for the quick test / demo (only if it isn't already here)
 if [ -e probe.js ]; then
   echo "probe.js already exists; leaving it as is."
 else
@@ -44,7 +69,7 @@ async function safe(fn) { try { return await fn(); } catch (e) {} }
 console.log("starting", process.env.NEW_SERVICE_URL);
 module.exports = { findUser, makeToken, total, safe };
 EOF
-  echo "Wrote probe.js (the test file for your first task)."
+  echo "Wrote probe.js (the test file for the quick test / demo)."
 fi
 echo
 
@@ -56,5 +81,5 @@ echo "  2. Give it this task:"
 echo
 echo "     Add a function deleteUser(id) to probe.js that removes a user by id, and export it."
 echo
-echo "Then read the record:  npx @earntori/cli ledger"
-echo "Verify one entry:      npx @earntori/cli receipt <seq>"
+echo "Then read the record:  $TORI ledger"
+echo "Verify one entry:      $TORI receipt <seq>"
