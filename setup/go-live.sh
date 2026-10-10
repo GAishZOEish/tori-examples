@@ -48,8 +48,8 @@ pin_file .cursor/mcp.json
 echo
 
 # 3. Standards don't carry over from the sandbox; turn them on here
-echo "Enabling financial crime and payments on production..."
-$TORI standards enable financial-crime payments
+echo "Enabling financial crime, payments and accounting on production..."
+$TORI standards enable financial-crime payments accounting
 echo
 
 # 4. The sandbox test file never belongs in your production record
