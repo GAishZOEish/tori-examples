@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Tori: Terms of Service</title>
+  <meta name="description" content="Tori: Terms of Service">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* Brand tokens. Everything below keys off these variables. */
+    :root {
+      --bg:      #FAFBF9;   /* page background */
+      --ink:     #14201B;   /* primary text */
+      --muted:   #5B6763;   /* secondary text */
+      --line:    #D9DFDB;   /* hairlines */
+      --accent:  #1F7A4D;   /* prompt glyph, copy confirm, link underline */
+      --panel:   #0F1714;   /* terminal block background */
+      --panel-ink: #E8EDEA; /* terminal block text */
+      --font-text: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0F1714; --ink: #E8EDEA; --muted: #9AA6A0; --line: #263129;
+        --panel: #060A08; --panel-ink: #E8EDEA;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-text);
+      font-size: 1.0625rem;
+      line-height: 1.55;
+    }
+    a { color: inherit; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    main {
+      max-width: 40rem;
+      margin: 0 auto;
+      padding: clamp(4rem, 14vh, 9rem) 1.5rem 4rem;
+    }
+
+    h1 {
+      font-weight: 600;
+      font-size: clamp(1.9rem, 5.5vw, 2.75rem);
+      line-height: 1.12;
+      letter-spacing: -0.015em;
+      margin: 0 0 2.25rem;
+      max-width: 24ch;
+    }
+
+    /* The command is the hero. */
+    .command {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--panel);
+      color: var(--panel-ink);
+      border-radius: 6px;
+      padding: 1rem 1rem 1rem 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 1rem;
+    }
+    .command .prompt { color: var(--accent); user-select: none; }
+    .command code { flex: 1; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .command code::-webkit-scrollbar { display: none; }
+    .command button {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: transparent;
+      color: var(--panel-ink);
+      font: 500 0.8125rem/1 var(--font-text);
+      padding: 0.5rem 0.7rem;
+      border-radius: 4px;
+      cursor: pointer;
+      min-width: 4.5rem;
+    }
+    .command button:hover { border-color: rgba(255,255,255,0.4); }
+    .command button[data-state="copied"] { border-color: var(--accent); color: var(--accent); }
+
+    /* What happens next: a timeline, because it is one. */
+    .next { margin: 2.75rem 0 0; padding: 0; list-style: none; }
+    .next li {
+      display: grid;
+      grid-template-columns: 4.25rem 1fr;
+      gap: 1rem;
+      padding: 0.9rem 0;
+      border-top: 1px solid var(--line);
+    }
+    .next li:last-child { border-bottom: 1px solid var(--line); }
+    .next time {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      color: var(--muted);
+      padding-top: 0.15rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .next p { margin: 0; }
+
+    footer {
+      margin-top: 3.5rem;
+      color: var(--muted);
+      font-size: 0.9375rem;
+    }
+    footer p { margin: 0.35rem 0; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .command button { transition: border-color 120ms ease, color 120ms ease; }
+    }
+  </style>
+
+    /* legal pages */
+    .legal h1 { font-size: clamp(1.6rem, 4.5vw, 2.1rem); margin-bottom: 0.5rem; max-width: none; }
+    .legal h2 { font-size: 1.125rem; font-weight: 600; margin: 2rem 0 0.5rem; }
+    .legal p { margin: 0.6rem 0; }
+    .legal table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; margin: 0.75rem 0 1rem; }
+    .legal th, .legal td { text-align: left; vertical-align: top; padding: 0.5rem 0.6rem 0.5rem 0; border-top: 1px solid var(--line); }
+    .legal tr:last-child td { border-bottom: 1px solid var(--line); }
+    .legal code { font-family: var(--font-mono); font-size: 0.875em; }
+    .legal .back { display: inline-block; margin-bottom: 2rem; color: var(--muted); font-size: 0.9375rem; }
+  </style>
+</head>
+<body>
+  <main class="legal">
+    <a class="back" href="/">← usetori.dev</a>
+<h1 id="tori-terms-of-service">Tori: Terms of Service</h1>
+<p>Effective 20261013 · Octo Fintech Holdings LLC</p>
+<p>These terms govern use of Tori, the service at usetori.dev and earntori.com, including its command-line tool, MCP server, connectors and API (the &quot;Service&quot;), provided by Octo Fintech Holdings LLC, a Delaware limited liability company (&quot;Tori&quot;, &quot;we&quot;). By creating an account or using the Service you agree to these terms on behalf of yourself and, if applicable, the company you represent (&quot;you&quot;).</p>
+<h2 id="1-the-service">1. The Service</h2>
+<p>Tori checks code and work produced by your coding agents against coding standards, domain standards you enable, and rules you add; reports findings with fixes; and keeps a signed, append-only record of checks, fixes, deferrals and recorded actions. Checks are deterministic rules. Tori does not write, run or deploy your code.</p>
+<h2 id="2-accounts">2. Accounts</h2>
+<p>You sign in with GitHub. You are responsible for activity under your account and for keeping your sessions and connector URLs confidential. You must be at least 18 and able to form a binding contract.</p>
+<h2 id="3-your-content">3. Your content</h2>
+<p>You keep all rights to your code, data and records. You grant Tori the right to process the files your agent changed, your repository&#39;s file list and related metadata solely to provide the Service, as described in the Privacy Policy. Findings and the record are yours to use, export and share. Tori does not use your content to train models and does not share or sell it.</p>
+<h2 id="4-acceptable-use">4. Acceptable use</h2>
+<p>You will not use the Service to violate any law or third-party right, probe or disrupt the Service, resell it without written agreement, or submit content you have no right to submit. Tori may suspend an account that does so.</p>
+<h2 id="5-standards-and-findings">5. Standards and findings</h2>
+<p>Tori&#39;s standards are aligned with public frameworks and rules (for example OWASP, CWE, FFIEC, FATF, Wolfsberg, OFAC, NACHA, PCI DSS, GAAP/IFRS) as published. A check against a standard is not a certification, audit opinion, legal advice or guarantee of compliance with any law, regulation, network rule or contract. You remain responsible for your code and for your obligations to your customers, partners, auditors and regulators.</p>
+<h2 id="6-fees">6. Fees</h2>
+<p>The Service is provided at the fees, if any, agreed in writing between you and Tori. Tori may change fees for future periods with at least 30 days&#39; notice.</p>
+<h2 id="7-confidentiality-and-security">7. Confidentiality and security</h2>
+<p>Tori treats your content as confidential, processes file contents in memory only, and applies the security measures described in the Privacy Policy. Tori will notify you within 72 hours of becoming aware of a security incident affecting your data.</p>
+<h2 id="8-intellectual-property">8. Intellectual property</h2>
+<p>The Service, its standards, rules, software and documentation are owned by Tori and its licensors. Open-source components are licensed under their own terms. Feedback you give may be used without obligation.</p>
+<h2 id="9-term-and-termination">9. Term and termination</h2>
+<p>Either party may end this agreement at any time. You may close your account by request to security@usetori.dev. On termination Tori deletes your findings, record and account details within 30 days, except as needed to comply with law. Sections 3, 5, 8, 10, 11 and 12 survive.</p>
+<h2 id="10-disclaimer">10. Disclaimer</h2>
+<p>The Service is provided &quot;as is&quot; and &quot;as available&quot;. To the fullest extent permitted by law, Tori disclaims all warranties, express or implied, including merchantability, fitness for a particular purpose and non-infringement, and does not warrant that the Service will find every defect or that findings are complete or error-free.</p>
+<h2 id="11-limitation-of-liability">11. Limitation of liability</h2>
+<p>To the fullest extent permitted by law, Tori is not liable for indirect, incidental, special, consequential or punitive damages, or for lost profits, revenue, data or goodwill, arising from the Service. Tori&#39;s total liability under these terms is limited to the greater of the fees you paid Tori in the 12 months before the claim and US$100.</p>
+<h2 id="12-general">12. General</h2>
+<p>These terms are governed by the laws of the State of Delaware, without regard to conflict-of-laws rules; disputes are brought in the state or federal courts located in Delaware. These terms, the Privacy Policy and any written order or data processing addendum are the entire agreement; a signed addendum controls over these terms where they conflict. Tori may update these terms with 30 days&#39; notice by email or at usetori.dev; continued use after the effective date is acceptance. If a provision is unenforceable the rest remains in effect. Neither party may assign this agreement without consent, except to a successor in a merger or sale of substantially all assets.</p>
+<h2 id="13-contact">13. Contact</h2>
+<p>Octo Fintech Holdings LLC · security@usetori.dev</p>
+
+    <footer>
+      <p>© 2026 Tori — a product of Octo Fintech Holdings LLC. All rights reserved. · <a href="/terms">Terms</a> · <a href="/privacy">Privacy</a></p>
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Tori: Privacy Policy</title>
+  <meta name="description" content="Tori: Privacy Policy">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* Brand tokens. Everything below keys off these variables. */
+    :root {
+      --bg:      #FAFBF9;   /* page background */
+      --ink:     #14201B;   /* primary text */
+      --muted:   #5B6763;   /* secondary text */
+      --line:    #D9DFDB;   /* hairlines */
+      --accent:  #1F7A4D;   /* prompt glyph, copy confirm, link underline */
+      --panel:   #0F1714;   /* terminal block background */
+      --panel-ink: #E8EDEA; /* terminal block text */
+      --font-text: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0F1714; --ink: #E8EDEA; --muted: #9AA6A0; --line: #263129;
+        --panel: #060A08; --panel-ink: #E8EDEA;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-text);
+      font-size: 1.0625rem;
+      line-height: 1.55;
+    }
+    a { color: inherit; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    main {
+      max-width: 40rem;
+      margin: 0 auto;
+      padding: clamp(4rem, 14vh, 9rem) 1.5rem 4rem;
+    }
+
+    h1 {
+      font-weight: 600;
+      font-size: clamp(1.9rem, 5.5vw, 2.75rem);
+      line-height: 1.12;
+      letter-spacing: -0.015em;
+      margin: 0 0 2.25rem;
+      max-width: 24ch;
+    }
+
+    /* The command is the hero. */
+    .command {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--panel);
+      color: var(--panel-ink);
+      border-radius: 6px;
+      padding: 1rem 1rem 1rem 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 1rem;
+    }
+    .command .prompt { color: var(--accent); user-select: none; }
+    .command code { flex: 1; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .command code::-webkit-scrollbar { display: none; }
+    .command button {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: transparent;
+      color: var(--panel-ink);
+      font: 500 0.8125rem/1 var(--font-text);
+      padding: 0.5rem 0.7rem;
+      border-radius: 4px;
+      cursor: pointer;
+      min-width: 4.5rem;
+    }
+    .command button:hover { border-color: rgba(255,255,255,0.4); }
+    .command button[data-state="copied"] { border-color: var(--accent); color: var(--accent); }
+
+    /* What happens next: a timeline, because it is one. */
+    .next { margin: 2.75rem 0 0; padding: 0; list-style: none; }
+    .next li {
+      display: grid;
+      grid-template-columns: 4.25rem 1fr;
+      gap: 1rem;
+      padding: 0.9rem 0;
+      border-top: 1px solid var(--line);
+    }
+    .next li:last-child { border-bottom: 1px solid var(--line); }
+    .next time {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      color: var(--muted);
+      padding-top: 0.15rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .next p { margin: 0; }
+
+    footer {
+      margin-top: 3.5rem;
+      color: var(--muted);
+      font-size: 0.9375rem;
+    }
+    footer p { margin: 0.35rem 0; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .command button { transition: border-color 120ms ease, color 120ms ease; }
+    }
+  </style>
+
+    /* legal pages */
+    .legal h1 { font-size: clamp(1.6rem, 4.5vw, 2.1rem); margin-bottom: 0.5rem; max-width: none; }
+    .legal h2 { font-size: 1.125rem; font-weight: 600; margin: 2rem 0 0.5rem; }
+    .legal p { margin: 0.6rem 0; }
+    .legal table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; margin: 0.75rem 0 1rem; }
+    .legal th, .legal td { text-align: left; vertical-align: top; padding: 0.5rem 0.6rem 0.5rem 0; border-top: 1px solid var(--line); }
+    .legal tr:last-child td { border-bottom: 1px solid var(--line); }
+    .legal code { font-family: var(--font-mono); font-size: 0.875em; }
+    .legal .back { display: inline-block; margin-bottom: 2rem; color: var(--muted); font-size: 0.9375rem; }
+  </style>
+</head>
+<body>
+  <main class="legal">
+    <a class="back" href="/">← usetori.dev</a>
+<h1 id="tori-privacy-policy">Tori: Privacy Policy</h1>
+<p>Effective 20261013 · Octo Fintech Holdings LLC</p>
+<p>This policy describes what Tori (Octo Fintech Holdings LLC, Delaware) receives when you use the Service at usetori.dev and earntori.com, what it keeps, for how long, and your choices. It matches Tori&#39;s data handling description; where they differ, the more specific statement in a signed data processing addendum controls.</p>
+<h2 id="1-what-tori-receives">1. What Tori receives</h2>
+<table><thead><tr><th>Data</th><th>When</th><th>Why</th></tr></thead><tbody><tr><td>Contents of the files your coding agent changed in a task</td><td>each check</td><td>to run the check</td></tr><tr><td>The list of file paths in the repository (names only)</td><td>each check</td><td>to run the check</td></tr><tr><td>Contents of <code>.env.example</code> (the template, no real values)</td><td>each check</td><td>to run the check</td></tr><tr><td>GitHub username and email</td><td>sign-in</td><td>your account</td></tr><tr><td>A one-time GitHub access token</td><td>sign-in</td><td>exchanged once for your Tori session; not stored</td></tr><tr><td>A machine identifier (a hash of hostname, user, OS and architecture); a label only if you set <code>TORI_AGENT_LABEL</code></td><td>start of each agent session</td><td>to identify which machine an agent ran on, in the record</td></tr><tr><td>The repository&#39;s name, from its git remote</td><td>install and each check</td><td>to identify the project</td></tr></tbody></table>
+<p>Tori does not receive any other file, your application&#39;s runtime data, your customers&#39; or end users&#39; data, or credentials. It never reads a repository as a whole and runs no background process on your machine. Tori&#39;s website sets no advertising or analytics cookies.</p>
+<h2 id="2-how-tori-uses-it">2. How Tori uses it</h2>
+<p>To run the checks, keep the record, operate your account, and meet legal obligations. The checks are deterministic rules; no AI model or model provider is in the data path. Tori does not use your data for any other purpose, does not use it to train models, and does not sell it or share it for advertising.</p>
+<h2 id="3-what-is-kept-and-for-how-long">3. What is kept, and for how long</h2>
+<table><thead><tr><th>Kept</th><th>Retention</th></tr></thead><tbody><tr><td>Findings: file path, line number, rule, message</td><td>life of the account</td></tr><tr><td>The signed record: hashes, timestamps, receipts</td><td>life of the account</td></tr><tr><td>Account details: GitHub identity, project names</td><td>life of the account</td></tr><tr><td>Machine identifier, and the label if you set one</td><td>life of the account; the record&#39;s first entry for a machine is permanent</td></tr></tbody></table>
+<p>File contents are processed in memory and discarded after the check; they are never written to storage or logs. The GitHub access token is used during sign-in and discarded. Hosting logs (request metadata, application messages) are kept for 1 day. Deleted data can be recovered for up to 1 day and not after.</p>
+<h2 id="4-who-else-handles-it">4. Who else handles it</h2>
+<table><thead><tr><th>Provider</th><th>Role</th><th>Data</th><th>Attestation</th></tr></thead><tbody><tr><td>Vercel</td><td>Hosts Tori&#39;s API</td><td>File contents in memory during a check; request metadata in logs (1 day)</td><td>SOC 2 Type II</td></tr><tr><td>Neon</td><td>Hosts Tori&#39;s database</td><td>Findings, the record, account details</td><td>SOC 2 Type II</td></tr><tr><td>GitHub</td><td>Sign-in (OAuth)</td><td>GitHub identity only</td><td>SOC 2 Type II</td></tr></tbody></table>
+<p>Processing and storage are in the United States (AWS us-west-2, Oregon). No other third party is in the data path. Tori gives 30 days&#39; notice before adding a subprocessor.</p>
+<h2 id="5-security">5. Security</h2>
+<p>Traffic between your machine and Tori is encrypted with TLS; data at rest is encrypted by Neon. The key that signs the record is a protected secret on Tori&#39;s servers and never leaves them. Production access is held by the founder, with MFA and separate production credentials; it reaches findings, the record and account details, never file contents or end-user data. Tori notifies you within 72 hours of becoming aware of a security incident affecting your data.</p>
+<h2 id="6-your-choices-and-rights">6. Your choices and rights</h2>
+<p>You can see everything Tori holds about a project with <code>tori ledger</code>, <code>tori standards</code> and <code>tori rules</code>. You can ask Tori to export, correct or delete your findings, record and account details by emailing security@usetori.dev; deletion is completed within 30 days of a request or account closure. If you are in a jurisdiction that grants data-protection rights (for example the EU/UK or California), you may exercise them the same way; Tori does not sell personal information and does not discriminate for exercising rights.</p>
+<h2 id="7-roles">7. Roles</h2>
+<p>For account data (your GitHub identity, project names, the record) Tori is the controller. For file contents sent for a check, Tori processes them on your instructions and keeps none of them. Tori is not intended for use by anyone under 18.</p>
+<h2 id="8-changes">8. Changes</h2>
+<p>Tori may update this policy; material changes are announced by email or at usetori.dev at least 30 days before they take effect. The effective date at the top is the current version.</p>
+<h2 id="9-contact">9. Contact</h2>
+<p>Octo Fintech Holdings LLC · security@usetori.dev</p>
+
+    <footer>
+      <p>© 2026 Tori — a product of Octo Fintech Holdings LLC. All rights reserved. · <a href="/terms">Terms</a> · <a href="/privacy">Privacy</a></p>
+    </footer>
+  </main>
+</body>
+</html>
