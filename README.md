@@ -10,14 +10,6 @@ Works with agents you use off the shelf — Claude Code, Cursor, Codex, Claude C
 - A GitHub account (sign-in)
 - Checks cover JavaScript / TypeScript projects today
 
-## Sign in
-
-```
-npx @earntori/cli login
-```
-
-Prints a GitHub sign-in link and a one-time code. The session is stored in `~/.tori/config.json`.
-
 ## Coding agents (CLI and IDE) — Claude Code, Codex, Cursor
 
 ```
@@ -25,7 +17,7 @@ cd your-project
 npx @earntori/cli init
 ```
 
-Adds Tori's tools to Claude Code, Cursor and Codex for this project. In Claude Code and Codex the checks also run automatically when the agent stops, and the agent gets a one-line reminder at session start to read the log first. Restart the session (in Codex, run `/hooks` once to trust the two hooks). From then on:
+Signs you in with GitHub the first time (a link and a one-time code), then adds Tori's tools to Claude Code, Cursor and Codex for this project. In Claude Code and Codex the checks also run automatically when the agent stops, and the agent gets a one-line reminder at session start to read the log first. Restart the session (in Codex, run `/hooks` once to trust the two hooks). From then on:
 
 - The agent's work is checked against your coding standards before a task completes; serious findings block the task until fixed or deferred, the rest are recorded
 - If a finding doesn't apply, the agent defers it with your reason (or you add a `// tori-ignore: reason` comment); deferrals are logged
@@ -52,43 +44,7 @@ Prints a URL once. In Claude → Settings → Connectors → Add custom connecto
 
 ## Agents you build
 
-Mint the agent's key; it is both its model key and its Tori identity:
-
-```
-npx @earntori/cli key --limit 5 --write env
-```
-
 When you add an agent you built, the first thing Tori does is check its code. Run `npx @earntori/cli init` in the agent's repo and the coding agent you build with gets the findings with their fixes, applies them, and can't finish with one open.
-
-JavaScript / TypeScript, with `@earntori/sdk` 0.3.0 or later — read the log first, record an intent before an action that matters, an outcome after it:
-
-```js
-import Tori from "@earntori/sdk";
-const tori = new Tori({ apiKey: process.env.OPENAI_API_KEY });
-
-const before = await tori.ledgerQuery({ include: ["open_findings", "waived", "head"] });
-
-const { action_id, receipt } = await tori.journal.intent({ summary: "Post invoice INV-42 to AP", ref: { type: "invoice", id: "INV-42" } });
-try {
-  await postInvoice(inv, { headers: tori.journal.headers(action_id) });
-  await tori.journal.outcome({ action_id, summary: "Posted INV-42; entry 8812" });
-} catch (e) {
-  await tori.journal.outcome({ action_id, summary: `Failed: ${e.message}` });
-  throw e;
-}
-```
-
-Any other language: three HTTP endpoints on `https://www.earntori.com`, bearer = the same key — `POST /api/v1/journal/append`, `GET /api/v1/ledger/query`, `GET /api/v1/ledger/receipts/{seq}`.
-
-Already have an agent? In Claude Code, the plugin checks its code first and then adds the calls at the points that matter (money, external writes, messages, deletes, paid calls, approval gates):
-
-```
-/plugin marketplace add GAishZOEish/tori-examples
-/plugin install tori-accountability@tori
-/tori-accountability:add-tori-accountability path/to/agent.js
-```
-
-Worked example: [examples/budgeted-agent](./examples/budgeted-agent) — an agent loop on a capped key, every model call logged.
 
 ## Reading what your agents did
 
@@ -99,15 +55,10 @@ Worked example: [examples/budgeted-agent](./examples/budgeted-agent) — an agen
 | Let an agent read it             | It calls `ledger_query`; with `include` it gets open findings, deferrals, recent runs and recent fixes                 |
 | Verify one entry | `npx @earntori/cli receipt <seq>` — checks the entry against Tori's published key and prints `VERIFIED` |
 | Follow one action                | `ledger_query { action_id }` — the intent, any findings on it, and its outcome                                        |
-| Keys                             | `npx @earntori/cli status`                                                                                             |
-
-## Keys
-
-An agent you build runs on a spend-capped key you mint with `npx @earntori/cli key --limit 5 --write env`. The key works anywhere the OpenAI API works (base URL `https://openrouter.ai/api/v1`, any major model): Cursor, Claude Code, your own code. When its cap is spent it returns 401 and the agent stops; that's the cap working. Mint another to keep going. One key per agent keeps what it spent next to what it did.
 
 ## Packages
 
-`@earntori/cli` · `@earntori/mcp` · `@earntori/sdk` — all on npm.
+`@earntori/cli` · `@earntori/mcp` — both on npm.
 
 ---
 
