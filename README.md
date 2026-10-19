@@ -60,6 +60,15 @@ When you add an agent you built, the first thing Tori does is check its code. Ru
 
 `@earntori/cli` · `@earntori/mcp` — both on npm.
 
+## Who publishes Tori
+
+Tori is published by Octo Fintech Holdings LLC (Ben Quaye). On GitHub, `GAishZOEish` is Ben Quaye's personal account and publishes this repository (the setup scripts and guides). The `usetori` organization, owned by the same account, holds the source (`usetori/tori`, private; design partners get read access) and the issue tracker (`usetori/Tori-MCP`). npm scope `@earntori` · API host `www.earntori.com` · site `usetori.dev` · security@usetori.dev.
+
+**Current versions (Oct 19, 2026):** this repository at tag v0.1.2 · `@earntori/cli` 0.2.16 · `@earntori/mcp` 0.1.9. The setup scripts install the current package versions when run; a project pinned to an earlier version keeps working until you re-run `init`.
+
+**Script checksums at v0.1.2 (sha256):**
+go-live.sh `8375a7acd867ecbe35aeac261af10f6b8332de098470b4cd1606f09a598071d5`
+
 ---
 
 Built by BQ
