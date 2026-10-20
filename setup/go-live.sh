@@ -11,13 +11,32 @@ if [ ! -f .tori/project.json ]; then
   exit 1
 fi
 
-# Resolve the exact package versions once, so nothing in this script or in the files it writes floats
-CLI_VER=$(npm view @earntori/cli version 2>/dev/null)
-MCP_VER=$(npm view @earntori/mcp version 2>/dev/null)
+# Optional: --cli <version> --mcp <version> to choose the package versions explicitly
+CLI_ARG=""; MCP_ARG=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --cli) CLI_ARG="$2"; shift 2 ;;
+    --mcp) MCP_ARG="$2"; shift 2 ;;
+    *) shift ;;
+  esac
+done
+
+# Versions, in order: --cli/--mcp flags; the versions already pinned in this project's agent config
+# (the ones you tested on sandbox); the current release from npm only if neither is available.
+pinned() { grep -rhoE "@earntori/$1@[0-9][0-9.]*" .claude/settings.json .mcp.json .codex/config.toml .codex/hooks.json .cursor/mcp.json 2>/dev/null | head -1 | sed "s#.*@##"; }
+CLI_VER="${CLI_ARG:-$(pinned cli)}"; MCP_VER="${MCP_ARG:-$(pinned mcp)}"
+SRC="the versions pinned in this project"
 if [ -z "$CLI_VER" ] || [ -z "$MCP_VER" ]; then
-  echo "Couldn't read the package versions from npm. Check your network and run this again."
+  CLI_VER="${CLI_VER:-$(npm view @earntori/cli version 2>/dev/null)}"
+  MCP_VER="${MCP_VER:-$(npm view @earntori/mcp version 2>/dev/null)}"
+  SRC="the current release from npm"
+fi
+if [ -n "$CLI_ARG" ] || [ -n "$MCP_ARG" ]; then SRC="the versions you passed"; fi
+if [ -z "$CLI_VER" ] || [ -z "$MCP_VER" ]; then
+  echo "Couldn't determine the package versions. Pass --cli <version> --mcp <version> and run this again."
   exit 1
 fi
+echo "Pinning production to $SRC"
 TORI="npx -y @earntori/cli@$CLI_VER"
 echo "Using @earntori/cli $CLI_VER and @earntori/mcp $MCP_VER"
 echo

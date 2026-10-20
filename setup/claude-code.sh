@@ -22,8 +22,17 @@ echo "Node $(node -v): ok"
 echo
 
 # Resolve the exact package versions once, so nothing in this script or in the files it writes floats
-CLI_VER=$(npm view @earntori/cli version 2>/dev/null)
-MCP_VER=$(npm view @earntori/mcp version 2>/dev/null)
+# Optional: --cli <version> --mcp <version> to choose the package versions explicitly
+CLI_ARG=""; MCP_ARG=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --cli) CLI_ARG="$2"; shift 2 ;;
+    --mcp) MCP_ARG="$2"; shift 2 ;;
+    *) shift ;;
+  esac
+done
+CLI_VER="${CLI_ARG:-$(npm view @earntori/cli version 2>/dev/null)}"
+MCP_VER="${MCP_ARG:-$(npm view @earntori/mcp version 2>/dev/null)}"
 if [ -z "$CLI_VER" ] || [ -z "$MCP_VER" ]; then
   echo "Couldn't read the package versions from npm. Check your network and run this again."
   exit 1
