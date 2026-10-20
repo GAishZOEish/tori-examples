@@ -64,10 +64,12 @@ When you add an agent you built, the first thing Tori does is check its code. Ru
 
 Tori is published by Octo Fintech Holdings LLC (Ben Quaye). On GitHub, `GAishZOEish` is Ben Quaye's personal account and publishes this repository (the setup scripts and guides). The `usetori` organization, owned by the same account, holds the source (`usetori/tori`, private; design partners get read access) and the issue tracker (`usetori/Tori-MCP`). npm scope `@earntori` · API host `www.earntori.com` · site `usetori.dev` · security@usetori.dev.
 
-**Current versions (Oct 19, 2026):** this repository at tag v0.1.2 · `@earntori/cli` 0.2.16 · `@earntori/mcp` 0.1.9. The setup scripts install the current package versions when run; a project pinned to an earlier version keeps working until you re-run `init`.
+**Current versions (Oct 20, 2026):** this repository at tag v0.1.3 · `@earntori/cli` 0.2.16 · `@earntori/mcp` 0.1.9. The setup scripts install the current package versions when run (or the ones you pass with `--cli <version> --mcp <version>`); `go-live.sh` pins production to the versions already in your project, the ones you tested on sandbox, unless you pass `--cli`/`--mcp`.
 
-**Script checksums at v0.1.2 (sha256):**
-go-live.sh `8375a7acd867ecbe35aeac261af10f6b8332de098470b4cd1606f09a598071d5`
+**Script checksums at v0.1.3 (sha256):**
+claude-code.sh `275c5a91e820e43248a88d7c6010c7da93ad750c9f04551b5f74e3d1c00cf5f8`
+codex.sh `f165b22430585ed5425e3790913f744068ccc0fc7d902ab60e5daf9cd6a3ee61`
+go-live.sh `82631c606a95eeba026892160284763f52f8d6a819e2609d7e19b46f2f6cdabd`
 
 ---
 
