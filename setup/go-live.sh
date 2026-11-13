@@ -55,7 +55,14 @@ echo
 # Pin the agent config files init just wrote to the exact versions above
 pin_file() {
   [ -f "$1" ] || return 0
-  perl -pi -e 's#\@earntori/cli(?!\@)#\@earntori/cli\@'"$CLI_VER"'#g; s#\@earntori/mcp(?!\@)#\@earntori/mcp\@'"$MCP_VER"'#g' "$1"
+  # Replace the version whether or not one is already there (tori init writes its own pins), then read the file back.
+  perl -pi -e 's#\@earntori/cli(?:\@[^"\s,\]\)\x27]*)?#\@earntori/cli\@'"$CLI_VER"'#g; s#\@earntori/mcp(?:\@[^"\s,\]\)\x27]*)?#\@earntori/mcp\@'"$MCP_VER"'#g' "$1"
+  other=$(perl -ne 'print "$&\n" while /\@earntori\/(?:cli|mcp)(?:\@[^"\s,\]\)\x27]*)?/g' "$1" | grep -vxF -e "@earntori/cli@$CLI_VER" -e "@earntori/mcp@$MCP_VER" | sort -u | tr '\n' ' ' || true)
+  if [ -n "$other" ]; then
+    echo "  x $1 is not pinned as requested. It still has: $other"
+    echo "Stopping here. Nothing after this step was run."
+    exit 1
+  fi
   echo "  pinned $1"
 }
 echo "Pinning agent config to @earntori/cli@$CLI_VER and @earntori/mcp@$MCP_VER:"
